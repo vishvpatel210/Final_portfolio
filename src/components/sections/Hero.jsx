@@ -20,6 +20,7 @@ const K = ({c}) => <span style={{color:c}}>{c}</span>;
 
 export default function Hero() {
   const canvasRef = useRef(null);
+  const resumeHref = `${import.meta.env.BASE_URL}vishv-resume.pdf`;
 
   useEffect(() => {
     const cv = canvasRef.current;
@@ -84,7 +85,7 @@ export default function Hero() {
             View Projects <FiArrowRight size={14}/>
           </button>
           <button className="btn-o" onClick={() => go('#contact')}>Get In Touch</button>
-          <a href="#" className={s.dlBtn} onClick={e=>e.preventDefault()}>
+          <a href={resumeHref} className={s.dlBtn} download="Vishv-Patel-Resume.pdf">
             <FiDownload size={13}/> Resume
           </a>
         </motion.div>

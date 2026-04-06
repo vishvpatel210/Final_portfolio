@@ -4,8 +4,10 @@ import { PERSONAL } from '../data/portfolioData';
 import s from './Navbar.module.css';
 
 const NAV = [
-  { l:'About', h:'#about' }, { l:'Skills', h:'#skills' },
-  { l:'Projects', h:'#projects' }, 
+  { l:'About', h:'#about' },
+  { l:'Skills', h:'#skills' },
+  { l:'Projects', h:'#projects' },
+  { l:'Certificates', h:'#certificates' },
   { l:'Contact', h:'#contact' },
 ];
 
@@ -31,8 +33,8 @@ const MoonIcon = () => (
 
 export default function Navbar({ theme, toggleTheme }) {
   const [scrolled, setScrolled] = useState(false);
-  const [active, setActive]     = useState('');
-  const [open, setOpen]         = useState(false);
+  const [active, setActive] = useState('');
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     const fn = () => {
@@ -104,10 +106,10 @@ export default function Navbar({ theme, toggleTheme }) {
                 ))}
               </ul>
               <div className={s.dsoc}>
-                <a href={PERSONAL.socials.github}   target="_blank" rel="noopener noreferrer">GitHub</a>
-                <a href={PERSONAL.socials.linkedin}  target="_blank" rel="noopener noreferrer">LinkedIn</a>
-                <a href={PERSONAL.socials.leetcode}  target="_blank" rel="noopener noreferrer">LeetCode</a>
-                <a href={PERSONAL.socials.twitter}   target="_blank" rel="noopener noreferrer">Twitter</a>
+                <a href={PERSONAL.socials.github} target="_blank" rel="noopener noreferrer">GitHub</a>
+                <a href={PERSONAL.socials.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
+                <a href={PERSONAL.socials.leetcode} target="_blank" rel="noopener noreferrer">LeetCode</a>
+                <a href={PERSONAL.socials.twitter} target="_blank" rel="noopener noreferrer">Twitter</a>
               </div>
             </motion.div>
           </>
