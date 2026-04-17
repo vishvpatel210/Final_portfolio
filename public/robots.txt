@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://vishvpatel-portfolio.vercel.app/sitemap.xml
+Sitemap: https://vishvpatel-portfolio.netlify.app/sitemap.xml
