@@ -1,12 +1,40 @@
 import React, { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import { TypeAnimation } from 'react-type-animation';
 import { FiGithub, FiLinkedin, FiTwitter, FiYoutube, FiArrowRight, FiDownload } from 'react-icons/fi';
 import { SiLeetcode } from 'react-icons/si';
 import { PERSONAL } from '../../data/portfolioData';
 import s from './Hero.module.css';
 
-const fu = d => ({ initial:{opacity:0,y:30}, animate:{opacity:1,y:0}, transition:{duration:.7,delay:d,ease:[.4,0,.2,1]} });
+/* ── Stagger container variant ── */
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.15,
+      delayChildren: 0.2,
+    },
+  },
+};
+
+/* ── Child item variant ── */
+const itemVariants = {
+  hidden: { opacity: 0, y: 35 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: [0.4, 0, 0.2, 1] },
+  },
+};
+
+/* ── Button hover animation ── */
+const btnHover = {
+  scale: 1.05,
+  transition: { duration: 0.3, ease: 'easeOut' },
+};
+const btnTap = { scale: 0.97 };
 
 const SOCS = [
   { href: PERSONAL.socials.github,   Icon: FiGithub,   label:'GitHub' },
@@ -16,94 +44,115 @@ const SOCS = [
   { href: PERSONAL.socials.youtube,  Icon: FiYoutube,  label:'YouTube' },
 ];
 
-const K = ({c}) => <span style={{color:c}}>{c}</span>;
-
 export default function Hero() {
-  const canvasRef = useRef(null);
   const resumeHref = `${import.meta.env.BASE_URL}vishv-resume.pdf`;
 
-  useEffect(() => {
-    const cv = canvasRef.current;
-    if (!cv) return;
-    const ctx = cv.getContext('2d');
-    let W, H, pts = [], id;
-    const resize = () => { W = cv.width = cv.offsetWidth; H = cv.height = cv.offsetHeight; };
-    resize();
-    window.addEventListener('resize', resize);
-    for (let i = 0; i < 100; i++) pts.push({
-      x: Math.random() * 2000, y: Math.random() * 1400,
-      vx: (Math.random() - .5) * .28, vy: -(Math.random() * .35 + .05),
-      r: Math.random() * 1.3 + .3,
-      a: Math.random() * .45 + .07,
-      c: Math.random() > .5 ? '100,255,218' : '0,245,255',
-    });
-    const draw = () => {
-      ctx.clearRect(0, 0, W, H);
-      pts.forEach(p => {
-        p.x += p.vx; p.y += p.vy;
-        if (p.y < -4) { p.y = H + 4; p.x = Math.random() * W; }
-        if (p.x < -4 || p.x > W + 4) p.vx *= -1;
-        ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(${p.c},${p.a})`; ctx.fill();
-      });
-      id = requestAnimationFrame(draw);
-    };
-    draw();
-    return () => { window.removeEventListener('resize', resize); cancelAnimationFrame(id); };
-  }, []);
-
-  const go = href => { const el = document.querySelector(href); if (el) window.scrollTo({ top: el.offsetTop - 78, behavior:'smooth' }); };
-
   return (
-    <section id="hero" className={s.hero}>
-      <canvas ref={canvasRef} className={s.canvas} />
+    <motion.section
+      id="hero"
+      className={s.hero}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
+    >
       <div className={s.grid} />
       <div className={s.blob1} /><div className={s.blob2} />
 
-      <div className={s.content}>
-        <motion.div className={s.badge} {...fu(.1)}>
+      {/* Subtle floating orbs */}
+      <motion.div
+        className={s.floatOrb1}
+        animate={{ y: [-20, 20, -20], x: [-8, 8, -8] }}
+        transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+      />
+      <motion.div
+        className={s.floatOrb2}
+        animate={{ y: [15, -25, 15], x: [5, -10, 5] }}
+        transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
+      />
+      <motion.div
+        className={s.floatOrb3}
+        animate={{ y: [-12, 18, -12], x: [-6, 12, -6] }}
+        transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
+      />
+
+      {/* Staggered content */}
+      <motion.div
+        className={s.content}
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+      >
+        <motion.div className={s.badge} variants={itemVariants}>
           <span className={s.pulse} /> Available for opportunities
         </motion.div>
 
-        <motion.h1 className={`${s.name} hero-name`} {...fu(.2)}>
+        <motion.h1 className={`${s.name} hero-name`} variants={itemVariants}>
           <span className={s.hi}>Hi, I'm</span>
           <span className={s.nameMain}>Vishv Patel</span>
         </motion.h1>
 
-        <motion.div className={s.roleRow} {...fu(.3)}>
+        <motion.div className={s.roleRow} variants={itemVariants}>
           <span>I build&nbsp;</span>
           <TypeAnimation
-            sequence={['Full-Stack Web Apps',2200,'React Interfaces',2200,'REST APIs & Backends',2200,'Beautiful UI/UX',2200]}
+            sequence={[
+              'Frontend Interfaces', 2200,
+              'MERN Stack Apps', 2200,
+              'Full-Stack Web Apps', 2200,
+              'REST APIs & Backends', 2200,
+              'Beautiful UI/UX', 2200,
+            ]}
             wrapper="span" speed={52} repeat={Infinity} className={s.roleType}
           />
         </motion.div>
 
-        <motion.p className={s.desc} {...fu(.4)}>{PERSONAL.bio1}</motion.p>
+        <motion.p className={s.desc} variants={itemVariants}>{PERSONAL.bio1}</motion.p>
 
-        <motion.div className={s.ctas} {...fu(.5)}>
-          <button className="btn-p" onClick={() => go('#projects')}>
-            View Projects <FiArrowRight size={14}/>
-          </button>
-          <button className="btn-o" onClick={() => go('#contact')}>Get In Touch</button>
-          <a href={resumeHref} className={s.dlBtn} download="Vishv-Patel-Resume.pdf">
+        <motion.div className={s.ctas} variants={itemVariants}>
+          <motion.div whileHover={btnHover} whileTap={btnTap}>
+            <Link to="/projects" className="btn-p">
+              View Work <FiArrowRight size={14}/>
+            </Link>
+          </motion.div>
+          <motion.div whileHover={btnHover} whileTap={btnTap}>
+            <Link to="/contact" className="btn-o">Contact Me</Link>
+          </motion.div>
+          <motion.a
+            href={resumeHref}
+            className={s.dlBtn}
+            download="Vishv-Patel-Resume.pdf"
+            whileHover={{ scale: 1.05, color: 'var(--primary)' }}
+            whileTap={btnTap}
+          >
             <FiDownload size={13}/> Resume
-          </a>
+          </motion.a>
         </motion.div>
 
-        <motion.div className={s.socials} {...fu(.6)}>
-          {SOCS.map(({ href, Icon, label }) => (
-            <a key={label} href={href} target="_blank" rel="noopener noreferrer"
-               className={s.socBtn} aria-label={label}>
+        <motion.div className={s.socials} variants={itemVariants}>
+          {SOCS.map(({ href, Icon, label }, i) => (
+            <motion.a
+              key={label}
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={s.socBtn}
+              aria-label={label}
+              whileHover={{ y: -6, scale: 1.12, boxShadow: '0 12px 28px rgba(111,231,210,.3)' }}
+              whileTap={{ scale: 0.95 }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.8 + i * 0.07, duration: 0.4 }}
+            >
               <Icon size={17}/>
-            </a>
+            </motion.a>
           ))}
         </motion.div>
-      </div>
+      </motion.div>
 
       {/* Floating code window */}
       <motion.div className={s.codeWin}
-        initial={{ opacity:0, x:60 }} animate={{ opacity:1, x:0 }}
-        transition={{ duration:.9, delay:.6, ease:[.4,0,.2,1] }}
+        initial={{ opacity: 0, x: 80, rotateY: -8 }}
+        animate={{ opacity: 1, x: 0, rotateY: 0 }}
+        transition={{ duration: 1, delay: 0.7, ease: [0.4, 0, 0.2, 1] }}
       >
         <div className={s.cwBar}>
           <span className={`${s.d} ${s.dr}`}/><span className={`${s.d} ${s.dy}`}/><span className={`${s.d} ${s.dg}`}/>
@@ -111,21 +160,21 @@ export default function Hero() {
         </div>
         <div className={s.cwBody}>
           <div><span style={{color:'#ff79c6'}}>const</span> <span style={{color:'#ccd6f6'}}>vishv</span> <span style={{color:'#00f5ff'}}>=</span> <span style={{color:'#00f5ff'}}>{'{'}</span></div>
-          <div style={{paddingLeft:16}}><span style={{color:'#64ffda'}}>name</span><span style={{color:'#00f5ff'}}>:</span> <span style={{color:'#c3e88d'}}>'Vishv Patel'</span><span style={{color:'#00f5ff'}}>,</span></div>
-          <div style={{paddingLeft:16}}><span style={{color:'#64ffda'}}>role</span><span style={{color:'#00f5ff'}}>:</span> <span style={{color:'#c3e88d'}}>'Full-Stack Dev'</span><span style={{color:'#00f5ff'}}>,</span></div>
-          <div style={{paddingLeft:16}}><span style={{color:'#64ffda'}}>skills</span><span style={{color:'#00f5ff'}}>: [</span></div>
+          <div style={{paddingLeft:16}}><span style={{color:'#6fe7d2'}}>name</span><span style={{color:'#00f5ff'}}>:</span> <span style={{color:'#c3e88d'}}>'Vishv Patel'</span><span style={{color:'#00f5ff'}}>,</span></div>
+          <div style={{paddingLeft:16}}><span style={{color:'#6fe7d2'}}>role</span><span style={{color:'#00f5ff'}}>:</span> <span style={{color:'#c3e88d'}}>'Full-Stack Dev'</span><span style={{color:'#00f5ff'}}>,</span></div>
+          <div style={{paddingLeft:16}}><span style={{color:'#6fe7d2'}}>skills</span><span style={{color:'#00f5ff'}}>: [</span></div>
           <div style={{paddingLeft:32}}><span style={{color:'#c3e88d'}}>'React'</span><span style={{color:'#00f5ff'}}>,</span> <span style={{color:'#c3e88d'}}>'Node.js'</span><span style={{color:'#00f5ff'}}>,</span></div>
           <div style={{paddingLeft:32}}><span style={{color:'#c3e88d'}}>'TypeScript'</span><span style={{color:'#00f5ff'}}>,</span> <span style={{color:'#c3e88d'}}>'MongoDB'</span></div>
           <div style={{paddingLeft:16}}><span style={{color:'#00f5ff'}}>],</span></div>
-          <div style={{paddingLeft:16}}><span style={{color:'#64ffda'}}>available</span><span style={{color:'#00f5ff'}}>:</span> <span style={{color:'#ff79c6'}}>true</span></div>
+          <div style={{paddingLeft:16}}><span style={{color:'#6fe7d2'}}>available</span><span style={{color:'#00f5ff'}}>:</span> <span style={{color:'#ff79c6'}}>true</span></div>
           <div><span style={{color:'#00f5ff'}}>{'}'}</span></div>
           <div><span className={s.caret}/></div>
         </div>
       </motion.div>
 
-      <motion.div className={s.scroll} initial={{opacity:0}} animate={{opacity:1}} transition={{delay:1.4}}>
+      <motion.div className={s.scroll} initial={{opacity:0}} animate={{opacity:1}} transition={{delay:1.6}}>
         <div className={s.scrollLine}/><span>SCROLL</span>
       </motion.div>
-    </section>
+    </motion.section>
   );
 }

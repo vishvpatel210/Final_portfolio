@@ -1,21 +1,19 @@
 import React, { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { PERSONAL } from '../data/portfolioData';
 import s from './Navbar.module.css';
 
 const NAV = [
-  { l:'About', h:'#about' },
-  { l:'Skills', h:'#skills' },
-  { l:'Projects', h:'#projects' },
-  { l:'Certificates', h:'#certificates' },
-  { l:'Contact', h:'#contact' },
+  { l:'Home',         to:'/' },
+  { l:'About',        to:'/about' },
+  { l:'Skills',       to:'/skills' },
+  { l:'Projects',     to:'/projects' },
+  { l:'Certificates', to:'/certificates' },
+  { l:'Education',    to:'/education' },
+  { l:'Community',    to:'/community' },
+  { l:'Contact',      to:'/contact' },
 ];
-
-const go = (href, cb) => {
-  const el = document.querySelector(href);
-  if (el) window.scrollTo({ top: el.offsetTop - 78, behavior: 'smooth' });
-  cb?.();
-};
 
 const SunIcon = () => (
   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -33,18 +31,16 @@ const MoonIcon = () => (
 
 export default function Navbar({ theme, toggleTheme }) {
   const [scrolled, setScrolled] = useState(false);
-  const [active, setActive] = useState('');
   const [open, setOpen] = useState(false);
+  const location = useLocation();
+
+  // Close drawer on route change
+  useEffect(() => {
+    setOpen(false);
+  }, [location.pathname]);
 
   useEffect(() => {
-    const fn = () => {
-      setScrolled(window.scrollY > 50);
-      let cur = '';
-      document.querySelectorAll('section[id]').forEach(el => {
-        if (window.scrollY >= el.offsetTop - 110) cur = el.id;
-      });
-      setActive(cur);
-    };
+    const fn = () => setScrolled(window.scrollY > 50);
     window.addEventListener('scroll', fn, { passive: true });
     fn();
     return () => window.removeEventListener('scroll', fn);
@@ -57,18 +53,23 @@ export default function Navbar({ theme, toggleTheme }) {
         transition={{ duration: .6, ease: [.4, 0, .2, 1] }}
       >
         <div className={s.inner}>
-          <a href="#hero" className={s.logo} onClick={e => { e.preventDefault(); go('#hero'); }}>
-            <span className={s.vp}>VP</span><span className={s.dev}>/dev</span>
-          </a>
+          <Link to="/" className={s.logo} style={{ textDecoration: 'none' }}>
+            <div className="vp-logo-circle">
+              <span className="vp-logo-text">VP</span>
+              <span className="vp-logo-ring" />
+              <span className="vp-logo-glow" />
+            </div>
+          </Link>
 
           <ul className={s.links}>
-            {NAV.map(({ l, h }) => (
+            {NAV.map(({ l, to }) => (
               <li key={l}>
-                <a href={h} className={`${s.lnk} ${active === h.slice(1) ? s.active : ''}`}
-                  onClick={e => { e.preventDefault(); go(h); }}>
+                <Link
+                  to={to}
+                  className={`${s.lnk} ${location.pathname === to ? s.active : ''}`}
+                >
                   {l}
-                  {active === h.slice(1) && <motion.span className={s.dot} layoutId="navdot" />}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>
@@ -77,7 +78,6 @@ export default function Navbar({ theme, toggleTheme }) {
             <button className={s.themeBtn} onClick={toggleTheme} aria-label="Toggle theme">
               {theme === 'dark' ? <SunIcon /> : <MoonIcon />}
             </button>
-            <a href={`mailto:${PERSONAL.email}`} className={s.hire}>Hire Me</a>
             <button className={`${s.ham} ${open ? s.hamOpen : ''}`} onClick={() => setOpen(o => !o)} aria-label="Menu">
               <span /><span /><span />
             </button>
@@ -97,11 +97,14 @@ export default function Navbar({ theme, toggleTheme }) {
               transition={{ type:'spring', damping:28, stiffness:200 }}
             >
               <ul>
-                {NAV.map(({ l, h }, i) => (
+                {NAV.map(({ l, to }, i) => (
                   <motion.li key={l} initial={{ opacity:0, x:30 }} animate={{ opacity:1, x:0 }} transition={{ delay:i*.05 }}>
-                    <a href={h} className={s.dlnk} onClick={e => { e.preventDefault(); go(h, () => setOpen(false)); }}>
+                    <Link
+                      to={to}
+                      className={`${s.dlnk} ${location.pathname === to ? s.activeDlnk : ''}`}
+                    >
                       <span className={s.dnum}>0{i+1}.</span>{l}
-                    </a>
+                    </Link>
                   </motion.li>
                 ))}
               </ul>

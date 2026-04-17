@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
+import { Link } from 'react-router-dom';
 import emailjs from '@emailjs/browser';
 import { FiGithub, FiLinkedin, FiTwitter, FiYoutube, FiMail, FiMapPin, FiSend, FiCheck, FiAlertCircle } from 'react-icons/fi';
 import { SiLeetcode } from 'react-icons/si';
@@ -38,7 +39,7 @@ export function Contact() {
 
   return (
     <section id="contact" ref={ref} style={{ padding:'var(--py) var(--px)', background:'var(--bg-secondary)', position:'relative', overflow:'hidden' }}>
-      <div style={{ position:'absolute', top:'50%', left:'50%', transform:'translate(-50%,-50%)', width:'700px', height:'700px', borderRadius:'50%', background:'radial-gradient(circle,rgba(0,245,255,.04) 0%,transparent 70%)', pointerEvents:'none' }}/>
+      <div style={{ position:'absolute', top:'50%', left:'50%', transform:'translate(-50%,-50%)', width:'700px', height:'700px', borderRadius:'50%', background:'radial-gradient(circle,rgba(111,231,210,.04) 0%,transparent 70%)', pointerEvents:'none' }}/>
       <div className="wrap">
         <motion.div initial={{ opacity:0,y:24 }} animate={inView?{opacity:1,y:0}:{}} transition={{ duration:.6 }} style={{ textAlign:'center', marginBottom:48 }}>
           <p className="sec-label" style={{ justifyContent:'center' }}>Contact</p>
@@ -66,7 +67,7 @@ export function Contact() {
                 </div>
               ))}
               {/* Available badge */}
-              <div style={{ marginTop:16, padding:'10px 14px', borderRadius:'var(--r-sm)', background:'rgba(100,255,218,.08)', border:'1px solid rgba(100,255,218,.2)', display:'flex', alignItems:'center', gap:8 }}>
+              <div style={{ marginTop:16, padding:'10px 14px', borderRadius:'var(--r-sm)', background:'rgba(111,231,210,.08)', border:'1px solid rgba(111,231,210,.2)', display:'flex', alignItems:'center', gap:8 }}>
                 <div style={{ width:8, height:8, borderRadius:'50%', background:'var(--primary)', flexShrink:0, animation:'pulsea 2s infinite' }}/>
                 <span style={{ fontFamily:'var(--font-mono)', fontSize:'.75rem', color:'var(--primary)' }}>Available for opportunities</span>
               </div>
@@ -109,7 +110,7 @@ export function Contact() {
                 </div>
 
                 <button type="submit" disabled={status==='sending'}
-                  style={{ width:'100%', padding:'13px', borderRadius:'var(--r)', background: status==='ok'?'#10b981':status==='err'?'#ef4444':'var(--primary)', color:'#0d1117', fontFamily:'var(--font-display)', fontWeight:700, fontSize:'.9rem', transition:'all .25s', display:'flex', alignItems:'center', justifyContent:'center', gap:8, opacity:status==='sending'?.7:1, cursor:status==='sending'?'not-allowed':'pointer' }}>
+                  style={{ width:'100%', padding:'13px', borderRadius:'var(--r)', background: status==='ok'?'#10b981':status==='err'?'#ef4444':'var(--primary)', color:'#0b1f1a', fontFamily:'var(--font-display)', fontWeight:700, fontSize:'.9rem', transition:'all .25s', display:'flex', alignItems:'center', justifyContent:'center', gap:8, opacity:status==='sending'?.7:1, cursor:status==='sending'?'not-allowed':'pointer' }}>
                   {status==='idle'    && <><FiSend size={15}/> Send Message</>}
                   {status==='sending' && <>Sending…</>}
                   {status==='ok'      && <><FiCheck size={15}/> Message Sent!</>}
@@ -121,7 +122,7 @@ export function Contact() {
         </div>
       </div>
 
-      <style>{`@keyframes pulsea{0%,100%{box-shadow:0 0 0 0 rgba(100,255,218,.5)}50%{box-shadow:0 0 0 7px rgba(100,255,218,0)}}`}</style>
+      <style>{`@keyframes pulsea{0%,100%{box-shadow:0 0 0 0 rgba(111,231,210,.5)}50%{box-shadow:0 0 0 7px rgba(111,231,210,0)}}`}</style>
     </section>
   );
 }
@@ -131,6 +132,7 @@ export function Contact() {
 ══════════════════════════════════ */
 export function Footer() {
   const scrollTop = () => window.scrollTo({ top:0, behavior:'smooth' });
+  const navigate = null; // kept for compatibility
 
   return (
     <footer style={{ background:'var(--bg-primary)', borderTop:'1px solid var(--border)', padding:'48px var(--px) 28px' }}>
@@ -138,9 +140,10 @@ export function Footer() {
         <div style={{ display:'grid', gridTemplateColumns:'1fr auto auto', gap:'40px', marginBottom:40, flexWrap:'wrap' }} className="footer-grid">
           {/* Brand */}
           <div>
-            <div style={{ display:'flex', alignItems:'baseline', gap:2, marginBottom:12 }}>
-              <span style={{ fontFamily:'var(--font-display)', fontWeight:800, fontSize:'1.3rem', background:'linear-gradient(135deg,var(--primary),var(--secondary))', WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent', backgroundClip:'text' }}>VP</span>
-              <span style={{ fontFamily:'var(--font-mono)', fontSize:'.82rem', color:'var(--text-secondary)' }}>/dev</span>
+            <div className="vp-logo-circle" style={{ marginBottom: 12 }}>
+              <span className="vp-logo-text">VP</span>
+              <span className="vp-logo-ring" />
+              <span className="vp-logo-glow" />
             </div>
             <p style={{ fontFamily:'var(--font-mono)', fontSize:'.8rem', color:'var(--text-secondary)', lineHeight:1.8, maxWidth:240 }}>Full-Stack Developer building scalable &amp; beautiful web applications.</p>
           </div>
@@ -149,11 +152,11 @@ export function Footer() {
           <div>
             <p style={{ fontFamily:'var(--font-mono)', fontSize:'.68rem', letterSpacing:'.16em', textTransform:'uppercase', color:'var(--text-secondary)', marginBottom:16 }}>Navigate</p>
             <ul style={{ display:'flex', flexDirection:'column', gap:10 }}>
-              {['About','Skills','Projects','Contact'].map(l => (
+              {[{l:'About',to:'/about'},{l:'Skills',to:'/skills'},{l:'Projects',to:'/projects'},{l:'Certificates',to:'/certificates'},{l:'Contact',to:'/contact'}].map(({ l, to }) => (
                 <li key={l}>
-                  <a href={`#${l.toLowerCase()}`} style={{ fontFamily:'var(--font-mono)', fontSize:'.82rem', color:'var(--text-secondary)', transition:'color .2s' }}
+                  <Link to={to} style={{ fontFamily:'var(--font-mono)', fontSize:'.82rem', color:'var(--text-secondary)', transition:'color .2s' }}
                     onMouseEnter={e=>e.currentTarget.style.color='var(--primary)'}
-                    onMouseLeave={e=>e.currentTarget.style.color='var(--text-secondary)'}>{l}</a>
+                    onMouseLeave={e=>e.currentTarget.style.color='var(--text-secondary)'}>{l}</Link>
                 </li>
               ))}
             </ul>

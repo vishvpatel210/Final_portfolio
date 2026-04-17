@@ -23,15 +23,7 @@ function CertCard({ cert, i, inView }) {
       initial={{ opacity: 0, y: 24 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.5, delay: i * 0.08 }}
-      className="cert-card card"
-      style={{
-        background: 'var(--surface)',
-        borderRadius: 'var(--r-lg)',
-        overflow: 'hidden',
-        border: '1px solid var(--border-solid)',
-        transition: 'none',
-        cursor: 'default',
-      }}
+      className="cert-card"
     >
       <div style={{ height: '4px', background: cert.color, opacity: 0.9 }} />
       {cert.image && (
@@ -39,21 +31,19 @@ function CertCard({ cert, i, inView }) {
           href={cert.link || cert.image}
           target="_blank"
           rel="noopener noreferrer"
-          style={{ display: 'block', height: '330px', background: '#09111f', overflow: 'hidden' }}
+          style={{ 
+            display: 'block', 
+            width: '100%',
+            height: '240px', 
+            background: '#09111f', 
+            overflow: 'hidden', 
+            position: 'relative' 
+          }}
         >
           <img
             src={cert.image}
             alt={cert.title}
-            style={{
-              width: '330px',
-              height: '100%',
-              objectFit: 'cover',
-              objectPosition: 'center',
-              display: 'block',
-              transform: 'rotate(270deg) scale(1.08)',
-              transformOrigin: 'center',
-              margin: '0 auto',
-            }}
+            className="cert-img"
           />
         </a>
       )}
@@ -133,11 +123,84 @@ function CertCard({ cert, i, inView }) {
   );
 }
 
+
+const CERT_STYLES = `
+  .cert-card {
+    background: #1a202c;
+    border-radius: var(--r-lg);
+    overflow: hidden;
+    border: 1px solid var(--border-solid);
+    position: relative;
+    cursor: default;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), 
+                box-shadow 0.4s ease, 
+                border-color 0.4s ease;
+  }
+
+  .cert-card:hover {
+    transform: translateY(-8px);
+    border-color: rgba(124, 255, 166, 0.4);
+    box-shadow: 
+      0 12px 32px rgba(0, 0, 0, 0.4),
+      0 0 20px rgba(124, 255, 166, 0.1);
+  }
+
+  /* ── Shimmer sweep pseudo-element ── */
+  .cert-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 60%; height: 100%;
+    background: linear-gradient(
+      110deg,
+      transparent,
+      rgba(255, 255, 255, 0.04),
+      transparent
+    );
+    transform: skewX(-20deg);
+    transition: left 0.6s ease;
+    z-index: 5;
+    pointer-events: none;
+  }
+  .cert-card:hover::before {
+    left: 140%;
+  }
+
+  /* ── Animated Top Accent Bar ── */
+  .cert-card::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #7cffa6, #00d9a6, transparent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    z-index: 10;
+  }
+  .cert-card:hover::after {
+    transform: scaleX(1);
+  }
+
+  .cert-card .cert-img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 240px; /* Current visual height */
+    height: 420px; /* Current visual width */
+    object-fit: cover;
+    transform: translate(-50%, -50%) rotate(-90deg);
+    transition: none;
+    display: block;
+  }
+`;
+
 export function Certificates() {
   const [ref, inView] = useInView({ threshold: 0.08, triggerOnce: true });
 
   return (
     <section id="certificates" ref={ref} style={{ padding: 'var(--py) var(--px)', background: 'var(--bg-primary)' }}>
+      <style>{CERT_STYLES}</style>
       <div className="wrap">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
@@ -149,7 +212,12 @@ export function Certificates() {
           <h2 className="sec-title">Certificates &amp; <span className="accent italic">Recognition</span></h2>
           <p className="sec-sub">Validated skills through certifications, course work, and hackathon recognition.</p>
         </motion.div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 640px)', justifyContent: 'center', gap: 16 }}>
+        <div style={{ 
+          display: 'grid', 
+          gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 420px))', 
+          justifyContent: 'start', 
+          gap: 24 
+        }}>
           {CERTIFICATE_ITEMS.map((cert, i) => (
             <CertCard key={cert.id} cert={cert} i={i} inView={inView} />
           ))}
@@ -186,8 +254,8 @@ function StatCard({ stat }) {
         transition: 'border-color .25s,box-shadow .25s',
       }}
       onMouseEnter={e => {
-        e.currentTarget.style.borderColor = 'rgba(100,255,218,.3)';
-        e.currentTarget.style.boxShadow = '0 14px 45px rgba(100,255,218,.07)';
+        e.currentTarget.style.borderColor = 'rgba(111,231,210,.3)';
+        e.currentTarget.style.boxShadow = '0 14px 45px rgba(111,231,210,.07)';
       }}
       onMouseLeave={e => {
         e.currentTarget.style.borderColor = 'var(--border-solid)';
@@ -231,7 +299,7 @@ export function Stats() {
           fontFamily: 'var(--font-display)',
           fontWeight: 800,
           fontSize: 'clamp(6rem,18vw,16rem)',
-          color: 'rgba(100,255,218,.03)',
+          color: 'rgba(111,231,210,.03)',
           whiteSpace: 'nowrap',
           pointerEvents: 'none',
           userSelect: 'none',
@@ -277,7 +345,7 @@ function TimelineItem({ item, i, inView }) {
             width: '42px',
             height: '42px',
             borderRadius: '50%',
-            background: isWork ? 'rgba(0,245,255,.15)' : 'rgba(100,255,218,.12)',
+            background: isWork ? 'rgba(111,231,210,.15)' : 'rgba(111,231,210,.12)',
             border: `2px solid ${isWork ? 'var(--secondary)' : 'var(--primary)'}`,
             display: 'flex',
             alignItems: 'center',
@@ -327,10 +395,10 @@ function TimelineItem({ item, i, inView }) {
               fontFamily: 'var(--font-mono)',
               fontSize: '.71rem',
               color: isWork ? 'var(--secondary)' : 'var(--primary)',
-              background: isWork ? 'rgba(0,245,255,.1)' : 'rgba(100,255,218,.1)',
+              background: isWork ? 'rgba(111,231,210,.1)' : 'rgba(111,231,210,.1)',
               padding: '4px 12px',
               borderRadius: '999px',
-              border: `1px solid ${isWork ? 'rgba(0,245,255,.2)' : 'rgba(100,255,218,.2)'}`,
+              border: `1px solid ${isWork ? 'rgba(111,231,210,.2)' : 'rgba(111,231,210,.2)'}`,
               whiteSpace: 'nowrap',
             }}
           >

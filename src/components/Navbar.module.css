@@ -32,13 +32,10 @@
   letter-spacing: .04em; color: var(--text-secondary);
   padding: 7px 13px; border-radius: var(--r-sm);
   transition: color .2s, background .2s;
+  text-decoration: none;
 }
 .lnk:hover { color: var(--text-primary); background: var(--surface); }
 .active { color: var(--primary) !important; }
-.dot {
-  position: absolute; bottom: 3px; left: 50%; transform: translateX(-50%);
-  width: 4px; height: 4px; border-radius: 50%; background: var(--primary);
-}
 
 .right { display: flex; align-items: center; gap: 10px; }
 
@@ -49,14 +46,6 @@
   color: var(--text-secondary); transition: all .2s;
 }
 .themeBtn:hover { color: var(--primary); border-color: var(--primary); transform: rotate(18deg); }
-
-.hire {
-  padding: 9px 22px; border-radius: var(--r-sm);
-  background: var(--primary); color: #0d1117;
-  font-family: var(--font-display); font-weight: 700; font-size: .8rem;
-  transition: all .2s;
-}
-.hire:hover { transform: translateY(-2px); box-shadow: 0 8px 25px var(--glow-strong); }
 
 .ham { display: none; flex-direction: column; gap: 5px; padding: 6px; border-radius: var(--r-sm); }
 .ham span { display: block; width: 22px; height: 2px; background: var(--text-primary); border-radius: 2px; transition: all .2s; }
@@ -75,8 +64,10 @@
   display: flex; align-items: baseline; gap: 10px;
   font-family: var(--font-display); font-size: 1.4rem; font-weight: 700;
   color: var(--text-secondary); padding: 10px 0; transition: color .2s;
+  text-decoration: none;
 }
 .dlnk:hover { color: var(--primary); }
+.activeDlnk { color: var(--primary) !important; }
 .dnum { font-family: var(--font-mono); font-size: .75rem; color: var(--primary); font-weight: 400; }
 .dsoc {
   display: flex; gap: 18px; margin-top: 40px;
@@ -86,6 +77,6 @@
 .dsoc a:hover { color: var(--primary); }
 
 @media (max-width: 900px) {
-  .links, .hire { display: none; }
+  .links { display: none; }
   .ham { display: flex; }
 }

@@ -1,98 +1,455 @@
-import React from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
-import { PERSONAL } from '../../data/portfolioData';
-import vp from '../../assets/225858041.jpg';
+import Tilt from 'react-parallax-tilt';
+import { FiCode, FiBriefcase, FiBook } from 'react-icons/fi';
+import vp from '../../assets/about-me-photo.jpg';
 
-const TAGS = ['React','Node.js','Next.js','Tailwind CSS','MongoDB','Git','Figma'];
-const MINI = [{ v:'10+', l:'Projects' },{ v:'3', l:'Certificates' },{ v:'10+', l:'Technologies' }];
+/* ── CountUp Hook ── */
+function useCountUp(target, inView, duration = 2) {
+  const [count, setCount] = useState(0);
+  useEffect(() => {
+    if (!inView) return;
+    let start = 0;
+    const step = target / (duration * 60);
+    const id = setInterval(() => {
+      start += step;
+      if (start >= target) {
+        setCount(target);
+        clearInterval(id);
+      } else {
+        setCount(Math.floor(start));
+      }
+    }, 1000 / 60);
+    return () => clearInterval(id);
+  }, [inView, target, duration]);
+  return count;
+}
 
-const fade = (d=0) => ({ hidden:{opacity:0,y:30}, show:{opacity:1,y:0,transition:{duration:.65,delay:d,ease:[.4,0,.2,1]}} });
+/* ── Stat Card Component ── */
+function StatCard({ icon: Icon, value, suffix, label, inView }) {
+  const count = useCountUp(value, inView);
+  
+  return (
+    <motion.div 
+      className="about-stat-card"
+      variants={{
+        hidden: { opacity: 0, y: 20 },
+        visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' } }
+      }}
+      whileHover={{ borderColor: 'rgba(0, 217, 166, 0.4)' }}
+    >
+      <div className="about-stat-icon">
+        <Icon size={18} />
+      </div>
+      <div className="about-stat-info">
+        <div className="about-stat-value">{count}{suffix}</div>
+        <div className="about-stat-label">{label}</div>
+      </div>
+    </motion.div>
+  );
+}
 
 export default function About() {
-  const [ref, inView] = useInView({ threshold:.12, triggerOnce:true });
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    handleResize(); // trigger on mount
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const aboutSectionRef = useRef(null);
+  const [inViewRef, inView] = useInView({ threshold: 0.15, triggerOnce: true });
+
+  const setRefs = useCallback(
+    (node) => {
+      aboutSectionRef.current = node;
+      inViewRef(node);
+    },
+    [inViewRef]
+  );
+
+  const TiltWrapper = isMobile ? React.Fragment : Tilt;
+  const tiltProps = isMobile ? {} : {
+    tiltMaxAngleX: 8,
+    tiltMaxAngleY: 8,
+    glareEnable: true,
+    glareMaxOpacity: 0.08,
+    glareColor: "#00d9a6",
+    glarePosition: "all",
+    glareBorderRadius: "16px",
+    scale: 1.03,
+    transitionSpeed: 400
+  };
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.1 },
+    },
+  };
+
+  const textVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.2, 0.65, 0.3, 0.9] } }
+  };
 
   return (
-    <section id="about" ref={ref} style={{ padding:'var(--py) var(--px)', background:'var(--bg-secondary)', position:'relative', overflow:'hidden' }}>
-      {/* decorative ring */}
-      <div style={{ position:'absolute', width:'500px', height:'500px', borderRadius:'50%', border:'1px solid rgba(100,255,218,.05)', top:'-150px', right:'-150px', pointerEvents:'none' }}/>
+    <section id="about" ref={setRefs} className="about-section">
 
-      <div className="wrap">
-        <div style={{ display:'grid', gridTemplateColumns:'1fr 1.45fr', gap:'64px', alignItems:'center' }} className="two-col">
-
-          {/* ── Avatar ── */}
-          <motion.div variants={fade(0)} initial="hidden" animate={inView?'show':'hidden'} style={{ position:'relative' }}>
-            <div style={{
-              borderRadius:'20px',
-              overflow:'hidden',
-              border:'1px solid var(--border-solid)',
-              aspectRatio:'4/5',
-              position:'relative',
-              boxShadow:'0 24px 80px rgba(0,0,0,.5), 0 0 0 1px rgba(100,255,218,.07)',
-            }}>
-              {/* Real Photo */}
-              <img
-                src={vp}
-                alt="Vishv Patel"
+      <div className="about-wrap">
+        <div className="about-grid">
+          
+          {/* ── LEFT: Personal Photo ── */}
+          <div className="about-photo-col">
+            <div className="about-photo-wrapper">
+              
+              {/* EFFECT 2: Glowing border ring (Solid) */}
+              <motion.div
                 style={{
-                  width:'100%',
-                  height:'100%',
-                  objectFit:'cover',
-                  objectPosition:'center top',
-                  display:'block',
+                  position: 'absolute', inset: 0,
+                  borderRadius: '16px',
+                  border: '1px solid #00d9a6',
+                  zIndex: 1
                 }}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={inView ? { opacity: 1, scale: 1 } : {}}
+                transition={{ duration: 0.8 }}
               />
-              {/* Subtle teal overlay at bottom for blending with theme */}
-              <div style={{
-                position:'absolute',
-                bottom:0, left:0, right:0,
-                height:'40%',
-                background:'linear-gradient(to top, rgba(10,15,20,.65), transparent)',
-                pointerEvents:'none',
-              }}/>
-              {/* Teal glow border effect */}
-              <div style={{
-                position:'absolute',
-                inset:0,
-                borderRadius:'20px',
-                boxShadow:'inset 0 0 0 1px rgba(100,255,218,.12)',
-                pointerEvents:'none',
-              }}/>
-            </div>
 
-          </motion.div>
+              {/* EFFECT 2: Glow pulse shadow */}
+              <motion.div
+                style={{
+                  position: 'absolute', inset: 0,
+                  borderRadius: '16px',
+                  zIndex: 0
+                }}
+                animate={{
+                  boxShadow: [
+                    "0 0 0px rgba(0,217,166,0)",
+                    "0 0 40px rgba(0,217,166,0.3)",
+                    "0 0 0px rgba(0,217,166,0)"
+                  ]
+                }}
+                transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+              />
 
-          {/* ── Text ── */}
-          <motion.div variants={fade(.12)} initial="hidden" animate={inView?'show':'hidden'}>
-            <p className="sec-label">About Me</p>
-            <h2 className="sec-title" style={{ marginBottom:22 }}>
-              Crafting <span className="accent">Digital</span> <span className="italic">Experiences</span>
-            </h2>
-            <p style={{ color:'var(--text-secondary)', fontSize:'.96rem', lineHeight:1.9, marginBottom:16 }}>
-              I'm a passionate <strong style={{ color:'var(--text-accent)' }}>Full-Stack Developer</strong> from India with hands-on experience building modern web applications from the ground up.
-            </p>
-            <p style={{ color:'var(--text-secondary)', fontSize:'.96rem', lineHeight:1.9, marginBottom:30 }}>
-              With deep expertise in both <strong style={{ color:'var(--primary)' }}>front-end polish</strong> and <strong style={{ color:'var(--secondary)' }}>back-end architecture</strong>, I bring ideas to life using React, Node.js, and modern cloud tooling.
-            </p>
+              {/* EFFECT 2: Rotating dashed ring (disabled on mobile) */}
+              {!isMobile && (
+                <motion.div 
+                  style={{
+                    position: 'absolute', inset: '-8px',
+                    borderRadius: '24px',
+                    border: '1px dashed rgba(0,217,166,0.3)',
+                    zIndex: 0
+                  }}
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                />
+              )}
 
-            {/* Tags */}
-            <div style={{ display:'flex', flexWrap:'wrap', gap:8, marginBottom:30 }}>
-              {TAGS.map(t => <span key={t} className="tag">{t}</span>)}
-            </div>
-
-            {/* Mini stats */}
-            <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:12 }}>
-               {MINI.map(({ v, l }) => (
-                 <div key={l} className="stat-card" style={{ background:'var(--surface)', borderRadius:'var(--r)', padding:'18px 14px', border:'1px solid var(--border-solid)', textAlign:'center' }}>
-                  <div style={{ fontFamily:'var(--font-display)', fontSize:'1.9rem', fontWeight:800, color:'var(--primary)', lineHeight:1 }}>{v}</div>
-                  <div style={{ fontFamily:'var(--font-mono)', fontSize:'.68rem', color:'var(--text-secondary)', marginTop:5, letterSpacing:'.06em' }}>{l}</div>
-                </div>
+              {/* EFFECT 4: Corner accent dots */}
+              {[
+                { top: '-3px', left: '-3px' }, 
+                { top: '-3px', right: '-3px' }, 
+                { bottom: '-3px', left: '-3px' }, 
+                { bottom: '-3px', right: '-3px' }
+              ].map((pos, i) => (
+                <motion.div
+                  key={i}
+                  style={{
+                    position: 'absolute', ...pos,
+                    width: '6px', height: '6px',
+                    borderRadius: '50%',
+                    background: '#00d9a6',
+                    zIndex: 10
+                  }}
+                  initial={{ scale: 0 }}
+                  animate={inView ? { scale: 1 } : {}}
+                  transition={{ delay: 0.8 + i * 0.1 }}
+                >
+                  <motion.div
+                    style={{ width: '100%', height: '100%', borderRadius: '50%', background: '#00d9a6' }}
+                    animate={{ opacity: [0.4, 1, 0.4] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                  />
+                </motion.div>
               ))}
-            </div>
-          </motion.div>
 
+              {/* EFFECT 1, 3, 4: Actual photo with tilt and entrance (scroll parallax removed) */}
+              <motion.div 
+                initial={{ opacity: 0, x: -60, scale: 0.9 }}
+                animate={inView ? { opacity: 1, x: 0, scale: 1 } : {}}
+                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                style={{ position: 'relative', zIndex: 2, width: '100%', height: '100%' }}
+              >
+                <TiltWrapper {...tiltProps} style={{ width: '100%', height: '100%' }}>
+                  <motion.img
+                    src={vp}
+                    className="about-photo-img"
+                    alt="Vishv Patel"
+                  />
+                </TiltWrapper>
+              </motion.div>
+
+              {/* EFFECT 6: Floating location badge */}
+              <motion.div
+                className="about-location-badge-wrapper"
+                style={{ position: 'absolute', bottom: '20px', right: '-8px', zIndex: 10 }}
+                initial={{ y: 20, opacity: 0 }}
+                animate={inView ? { y: 0, opacity: 1 } : {}}
+                transition={{ delay: 0.5, duration: 0.6 }}
+              >
+                <motion.div
+                  className="about-location-badge"
+                  style={{ position: 'relative', bottom: 0, right: 0 }}
+                  animate={{ y: [0, -6, 0] }}
+                  transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+                  whileHover={{ scale: 1.05, borderColor: '#00d9a6' }}
+                >
+                  📍 Gandhinagar, India
+                </motion.div>
+              </motion.div>
+              
+            </div>
+          </div>
+
+          {/* ── RIGHT: About Content ── */}
+          <motion.div 
+            className="about-content-col"
+            variants={containerVariants}
+            initial="hidden"
+            animate={inView ? 'visible' : 'hidden'}
+          >
+            {/* Section Tag */}
+            <motion.div className="about-tag-row" variants={textVariants}>
+              <span className="about-tag-line" />
+              <span className="about-tag-text">ABOUT ME</span>
+            </motion.div>
+
+            {/* Heading */}
+            <motion.h2 className="about-heading" variants={textVariants}>
+              About <span className="accent italic">Me.</span>
+            </motion.h2>
+
+            {/* Descriptions */}
+            <motion.p className="about-desc" variants={textVariants}>
+              Computer Science student crafting digital experiences. I architect 
+              full-stack solutions with a passion for clean code and scalable systems 
+              — from MongoDB backends to React frontends. Driven by curiosity, 
+              fueled by challenge.
+            </motion.p>
+            
+            <motion.p className="about-desc" variants={textVariants}>
+              I thrive on solving complex algorithmic problems and transforming 
+              ideas into production-ready applications. Currently building real-world 
+              MERN stack projects and participating in hackathons.
+            </motion.p>
+
+            {/* Stats Row */}
+            <motion.div className="about-stats-row" variants={containerVariants}>
+              <StatCard icon={FiCode} value={500} suffix="+" label="Hours Coding" inView={inView} />
+              <StatCard icon={FiBriefcase} value={10} suffix="+" label="Projects" inView={inView} />
+              <StatCard icon={FiBook} value={0} suffix="CS" label="Student" inView={inView} />
+            </motion.div>
+          </motion.div>
+          
         </div>
       </div>
+
+      <style>{`
+        .about-section {
+          padding: 120px var(--px);
+          background: var(--bg-primary);
+          position: relative;
+          overflow: hidden;
+          color: #ffffff;
+        }
+
+
+        .about-wrap {
+          position: relative;
+          z-index: 1;
+          max-width: 1100px;
+          margin: 0 auto;
+        }
+
+        .about-grid {
+          display: grid;
+          grid-template-columns: 0.8fr 1.2fr;
+          gap: 70px;
+          align-items: center;
+        }
+
+        /* ── Left Side: Photo ── */
+        .about-photo-col {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+
+        .about-photo-wrapper {
+          position: relative;
+          width: 100%;
+          max-width: 320px;
+          aspect-ratio: 4/5;
+        }
+
+        .about-photo-img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          display: block;
+          border-radius: 16px;
+          background: #0a1a15;
+        }
+
+        .about-location-badge {
+          background: rgba(0, 217, 166, 0.1);
+          border: 1px solid rgba(0, 217, 166, 0.3);
+          backdrop-filter: blur(8px);
+          -webkit-backdrop-filter: blur(8px);
+          color: #e0e0e0;
+          padding: 6px 14px;
+          border-radius: 999px;
+          font-family: var(--font-mono), monospace;
+          font-size: 0.75rem;
+          letter-spacing: 0.05em;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+          cursor: pointer;
+          transition: border-color 0.3s;
+        }
+
+        /* ── Right Side: Content ── */
+        .about-content-col {
+          display: flex;
+          flex-direction: column;
+        }
+
+        .about-tag-row {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          margin-bottom: 20px;
+        }
+
+        .about-tag-line {
+          width: 40px;
+          height: 1px;
+          background: #00d9a6;
+        }
+
+        .about-tag-text {
+          font-family: var(--font-mono), monospace;
+          font-size: 0.85rem;
+          color: #00d9a6;
+          letter-spacing: 0.15em;
+          font-weight: 600;
+        }
+
+        .about-heading {
+          font-family: var(--font-display), sans-serif;
+          font-size: clamp(2.5rem, 4vw, 3.5rem);
+          font-weight: 800;
+          line-height: 1.1;
+          margin: 0 0 28px 0;
+        }
+
+        .about-desc {
+          color: #a0a0a0;
+          line-height: 1.8;
+          font-family: var(--font-mono), monospace;
+          font-size: 0.95rem;
+          margin: 0 0 20px 0;
+        }
+        .about-desc:last-of-type {
+          margin-bottom: 36px;
+        }
+
+        /* ── Stats Cards ── */
+        .about-stats-row {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 16px;
+        }
+
+        .about-stat-card {
+          background: rgba(0, 217, 166, 0.05);
+          border: 1px solid rgba(0, 217, 166, 0.15);
+          border-radius: 0.75rem;
+          padding: 16px;
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+          transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .about-stat-icon {
+          color: #00d9a6;
+        }
+
+        .about-stat-info {
+          display: flex;
+          flex-direction: column;
+          gap: 2px;
+        }
+
+        .about-stat-value {
+          font-family: var(--font-display), sans-serif;
+          font-size: 1.5rem;
+          font-weight: 700;
+          color: #ffffff;
+          line-height: 1;
+        }
+
+        .about-stat-label {
+          font-family: var(--font-mono), monospace;
+          font-size: 0.75rem;
+          color: #a0a0a0;
+        }
+
+        /* ── Responsive ── */
+        /* Keep responsive grids but remove old photo-frame specific queries */
+        @media (min-width: 900px) {
+          .about-photo-img {
+            /* optional static subtle adjustments here */
+          }
+        }
+
+        @media (max-width: 900px) {
+          .about-section {
+            padding: 80px var(--px);
+          }
+          .about-grid {
+            grid-template-columns: 1fr;
+            gap: 48px;
+          }
+          .about-photo-wrapper {
+            max-width: 280px;
+          }
+          .about-location-badge-wrapper {
+            right: 50%;
+            transform: translateX(50%);
+            bottom: 16px;
+          }
+        }
+
+        @media (max-width: 640px) {
+          .about-stats-row {
+            grid-template-columns: 1fr;
+            gap: 12px;
+          }
+          .about-stat-card {
+            flex-direction: row;
+            align-items: center;
+            gap: 16px;
+            padding: 14px 16px;
+          }
+        }
+      `}</style>
     </section>
   );
 }

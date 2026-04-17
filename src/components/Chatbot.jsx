@@ -43,7 +43,7 @@ export default function Chatbot() {
       <motion.button
         onClick={() => setOpen(o => !o)}
         whileHover={{ scale:1.08 }} whileTap={{ scale:.95 }}
-        style={{ position:'fixed', bottom:28, right:28, width:52, height:52, borderRadius:'50%', background:'linear-gradient(135deg,var(--primary),var(--secondary))', border:'none', cursor:'pointer', zIndex:1000, display:'flex', alignItems:'center', justifyContent:'center', color:'#0d1117', boxShadow:'0 8px 30px rgba(100,255,218,.4)' }}
+        style={{ position:'fixed', bottom:28, right:28, width:52, height:52, borderRadius:'50%', background:'linear-gradient(135deg,var(--primary),var(--secondary))', border:'none', cursor:'pointer', zIndex:1000, display:'flex', alignItems:'center', justifyContent:'center', color:'#0b1f1a', boxShadow:'0 8px 30px rgba(111,231,210,.4)' }}
         aria-label="Open chatbot"
       >
         <AnimatePresence mode="wait">
@@ -80,7 +80,7 @@ export default function Chatbot() {
             <div style={{ flex:1, overflowY:'auto', padding:'14px 16px', display:'flex', flexDirection:'column', gap:10 }}>
               {msgs.map((m, i) => (
                 <div key={i} style={{ display:'flex', justifyContent:m.from==='user'?'flex-end':'flex-start' }}>
-                  <div style={{ maxWidth:'82%', padding:'10px 14px', borderRadius:m.from==='user'?'14px 14px 4px 14px':'14px 14px 14px 4px', background:m.from==='user'?'linear-gradient(135deg,var(--primary),var(--secondary))':'var(--surface)', color:m.from==='user'?'#0d1117':'var(--text-primary)', fontFamily:'var(--font-mono)', fontSize:'.8rem', lineHeight:1.7, whiteSpace:'pre-line', border:m.from==='bot'?'1px solid var(--border-solid)':'none' }}>
+                  <div style={{ maxWidth:'82%', padding:'10px 14px', borderRadius:m.from==='user'?'14px 14px 4px 14px':'14px 14px 14px 4px', background:m.from==='user'?'linear-gradient(135deg,var(--primary),var(--secondary))':'var(--surface)', color:m.from==='user'?'#0b1f1a':'var(--text-primary)', fontFamily:'var(--font-mono)', fontSize:'.8rem', lineHeight:1.7, whiteSpace:'pre-line', border:m.from==='bot'?'1px solid var(--border-solid)':'none' }}>
                     {m.text}
                   </div>
                 </div>
@@ -120,7 +120,7 @@ export default function Chatbot() {
                 onBlur={e=>e.currentTarget.style.borderColor='var(--border-solid)'}
               />
               <button onClick={() => send()}
-                style={{ width:36, height:36, borderRadius:'50%', background:'linear-gradient(135deg,var(--primary),var(--secondary))', border:'none', display:'flex', alignItems:'center', justifyContent:'center', cursor:'pointer', flexShrink:0, color:'#0d1117', transition:'transform .2s' }}
+                style={{ width:36, height:36, borderRadius:'50%', background:'linear-gradient(135deg,var(--primary),var(--secondary))', border:'none', display:'flex', alignItems:'center', justifyContent:'center', cursor:'pointer', flexShrink:0, color:'#0b1f1a', transition:'transform .2s' }}
                 onMouseEnter={e=>e.currentTarget.style.transform='scale(1.08)'}
                 onMouseLeave={e=>e.currentTarget.style.transform='scale(1)'}>
                 <FiSend size={14}/>

@@ -45,14 +45,14 @@ export default function InteractiveEffects() {
         particle.style.cssText = `
           width: ${3 + Math.random() * 4}px;
           height: ${3 + Math.random() * 4}px;
-          background: #00dca0;
+          background: #6fe7d2;
           border-radius: 50%;
           position: fixed;
           pointer-events: none;
           z-index: 99999;
           left: ${x}px;
           top: ${y}px;
-          box-shadow: 0 0 6px #00dca0;
+          box-shadow: 0 0 6px #6fe7d2;
         `;
         
         document.body.appendChild(particle);
@@ -77,8 +77,8 @@ export default function InteractiveEffects() {
     const handleMouseEnter = () => {
       if (cursorRef.current) {
         cursorRef.current.style.transform += ' scale(1.8)';
-        cursorRef.current.style.borderColor = '#00dca0';
-        cursorRef.current.style.background = 'rgba(0,220,160,0.08)';
+        cursorRef.current.style.borderColor = '#6fe7d2';
+        cursorRef.current.style.background = 'rgba(111,231,210,0.08)';
       }
     };
 
@@ -151,14 +151,14 @@ export default function InteractiveEffects() {
         style={{
           width: '6px',
           height: '6px',
-          background: '#00dca0',
+          background: '#6fe7d2',
           borderRadius: '50%',
           position: 'fixed',
           top: 0,
           left: 0,
           pointerEvents: 'none',
           zIndex: 100000,
-          boxShadow: '0 0 10px #00dca0, 0 0 20px rgba(0,220,160,0.5)',
+          boxShadow: '0 0 10px #6fe7d2, 0 0 20px rgba(111,231,210,0.5)',
           transition: 'transform 0.05s ease',
           willChange: 'transform'
         }}
