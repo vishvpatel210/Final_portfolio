@@ -80,3 +80,10 @@
   .links { display: none; }
   .ham { display: flex; }
 }
+
+@media (max-width: 640px) {
+  .vp { font-size: 1.15rem; }
+  .dev { display: none; }
+  .inner { padding: 0 16px; }
+  .themeBtn { width: 34px; height: 34px; }
+}

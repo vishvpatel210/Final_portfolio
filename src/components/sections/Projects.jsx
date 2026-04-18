@@ -436,12 +436,35 @@ export default function Projects() {
         .link-item.yt { color: #ff4444; }
 
         /* ── Responsive Mobile Mapping ── */
+        @media (max-width: 1024px) {
+          .projects-grid {
+             grid-template-columns: repeat(2, 1fr);
+          }
+        }
+
         @media (max-width: 768px) {
+          .projects-header-row {
+            flex-direction: column;
+            align-items: flex-start;
+          }
           .projects-grid {
              grid-template-columns: 1fr;
           }
-          .projects-grid .project-card {
-             grid-column: 1 / -1 !important;
+          .sec-title {
+             font-size: 2.2rem;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .filter-row {
+            gap: 8px;
+          }
+          .filter-tab {
+            padding: 6px 14px;
+            font-size: 0.78rem;
+          }
+          .card-preview {
+            height: 180px;
           }
         }
       `}</style>

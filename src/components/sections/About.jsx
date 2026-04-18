@@ -419,25 +419,39 @@ export default function About() {
           }
         }
 
-        @media (max-width: 900px) {
+        @media (max-width: 1024px) {
           .about-section {
             padding: 80px var(--px);
           }
           .about-grid {
             grid-template-columns: 1fr;
             gap: 48px;
+            text-align: center;
           }
           .about-photo-wrapper {
             max-width: 280px;
+            margin: 0 auto;
+          }
+          .about-content-col {
+            align-items: center;
+          }
+          .about-tag-row {
+            justify-content: center;
           }
           .about-location-badge-wrapper {
             right: 50%;
             transform: translateX(50%);
             bottom: 16px;
           }
+          .about-stats-row {
+             width: 100%;
+          }
         }
 
         @media (max-width: 640px) {
+          .about-heading {
+             font-size: 2.2rem;
+          }
           .about-stats-row {
             grid-template-columns: 1fr;
             gap: 12px;

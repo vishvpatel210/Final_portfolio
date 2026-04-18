@@ -47,7 +47,7 @@ export function Contact() {
           <p className="sec-sub" style={{ margin:'10px auto 0', textAlign:'center', maxWidth:520 }}>Have a project in mind or want to chat? I'm always open to new opportunities and collaborations.</p>
         </motion.div>
 
-        <div style={{ display:'grid', gridTemplateColumns:'1fr 1.4fr', gap:'40px', alignItems:'start' }} className="two-col">
+        <div style={{ display:'grid', gap:'40px', alignItems:'start' }} className="res-grid-contact">
           {/* ── Left info ── */}
           <motion.div initial={{ opacity:0,x:-30 }} animate={inView?{opacity:1,x:0}:{}} transition={{ delay:.15 }}>
             <div style={{ background:'var(--surface)', borderRadius:'var(--r-lg)', border:'1px solid var(--border-solid)', padding:'28px', marginBottom:18 }}>
@@ -90,7 +90,7 @@ export function Contact() {
           <motion.div initial={{ opacity:0,x:30 }} animate={inView?{opacity:1,x:0}:{}} transition={{ delay:.2 }}>
             <div style={{ background:'var(--surface)', borderRadius:'var(--r-lg)', border:'1px solid var(--border-solid)', padding:'32px' }}>
               <form ref={formRef} onSubmit={send}>
-                <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:14, marginBottom:14 }}>
+                <div style={{ display:'grid', gap:14, marginBottom:14 }} className="res-grid-inputs">
                   <div>
                     <label style={{ fontFamily:'var(--font-mono)', fontSize:'.72rem', color:'var(--text-secondary)', display:'block', marginBottom:6, letterSpacing:'.06em' }}>NAME</label>
                     <input className="inp" name="from_name" placeholder="Vishv Patel" value={fields.from_name} onChange={handle} required/>
@@ -122,7 +122,26 @@ export function Contact() {
         </div>
       </div>
 
-      <style>{`@keyframes pulsea{0%,100%{box-shadow:0 0 0 0 rgba(111,231,210,.5)}50%{box-shadow:0 0 0 7px rgba(111,231,210,0)}}`}</style>
+      <style>{`
+        @keyframes pulsea{0%,100%{box-shadow:0 0 0 0 rgba(111,231,210,.5)}50%{box-shadow:0 0 0 7px rgba(111,231,210,0)}}
+        
+        .res-grid-contact { grid-template-columns: 1fr 1.4fr; }
+        @media (max-width: 900px) {
+          .res-grid-contact { grid-template-columns: 1fr; }
+        }
+
+        .res-grid-inputs { grid-template-columns: 1fr 1fr; }
+        @media (max-width: 640px) {
+          .res-grid-inputs { grid-template-columns: 1fr; }
+        }
+
+        .res-grid-footer { grid-template-columns: 1fr auto auto; }
+        @media (max-width: 768px) {
+          .res-grid-footer { grid-template-columns: 1fr; text-align: center; }
+          .res-grid-footer > div { display: flex; flex-direction: column; align-items: center; }
+          .footer-bottom { justify-content: center; text-align: center; }
+        }
+      `}</style>
     </section>
   );
 }
@@ -137,7 +156,7 @@ export function Footer() {
   return (
     <footer style={{ background:'var(--bg-primary)', borderTop:'1px solid var(--border)', padding:'48px var(--px) 28px' }}>
       <div className="wrap">
-        <div style={{ display:'grid', gridTemplateColumns:'1fr auto auto', gap:'40px', marginBottom:40, flexWrap:'wrap' }} className="footer-grid">
+        <div style={{ display:'grid', gap:'40px', marginBottom:40 }} className="res-grid-footer">
           {/* Brand */}
           <div>
             <div className="vp-logo-circle" style={{ marginBottom: 12 }}>
@@ -185,7 +204,7 @@ export function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', paddingTop:20, borderTop:'1px solid var(--border)', flexWrap:'wrap', gap:12 }}>
+        <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', paddingTop:20, borderTop:'1px solid var(--border)', flexWrap:'wrap', gap:12 }} className="footer-bottom">
           <p style={{ fontFamily:'var(--font-mono)', fontSize:'.78rem', color:'var(--text-secondary)' }}>
             © 2026 <a href={PERSONAL.socials.github} target="_blank" rel="noopener noreferrer" style={{ color:'var(--primary)' }}>Vishv Patel</a>. Built with React &amp; ♥
           </p>

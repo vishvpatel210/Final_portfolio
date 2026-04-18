@@ -112,7 +112,7 @@
 .name { font-family: var(--font-display); line-height: 1; letter-spacing: -.04em; margin-bottom: 18px; }
 .hi { display: block; font-size: clamp(1rem, 2.5vw, 1.5rem); font-weight: 600; color: var(--text-secondary); margin-bottom: 4px; }
 .nameMain {
-  display: block; font-size: clamp(3rem, 9vw, 7rem); font-weight: 800;
+  display: block; font-size: clamp(1.8rem, 10vw, 7rem); font-weight: 800;
   background: linear-gradient(135deg, var(--text-accent) 0%, var(--primary) 55%, var(--secondary) 100%);
   -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
 }
@@ -229,7 +229,30 @@
   51%{transform-origin:bottom}
   100%{transform:scaleY(0);transform-origin:bottom;opacity:0}
 }
-@media(max-width: 640px) { .hero{padding-top: calc(var(--nav-h) + 40px);} .scroll{display:none;} }
-
-
-
+@media(max-width: 640px) { 
+  .hero { 
+    padding-top: calc(var(--nav-h) + 60px); 
+    padding-bottom: 160px;
+  } 
+  .scroll { display: none; } 
+  .nameMain { font-size: clamp(1.8rem, 10vw, 2.8rem); line-height: 1.1; margin-bottom: 24px; }
+  .hi { font-size: 1.1rem; }
+  .ctas { 
+    flex-direction: column; 
+    align-items: center; 
+    gap: 15px; 
+    width: 100%;
+  }
+  .ctas > * {
+    width: 260px;
+    display: flex;
+  }
+  .ctas a, .ctas button {
+    width: 100%;
+    justify-content: center;
+  }
+  .dlBtn {
+    border-radius: var(--r); /* Sync with .btn-p / .btn-o */
+  }
+  .socBtn { width: 44px; height: 44px; }
+}

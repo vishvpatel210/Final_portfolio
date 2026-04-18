@@ -198,12 +198,18 @@ const CERT_STYLES = `
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 240px; /* Current visual height */
-    height: 420px; /* Current visual width */
+    width: 240px;
+    height: 420px;
     object-fit: cover;
     transform: translate(-50%, -50%) rotate(-90deg);
     transition: none;
     display: block;
+  }
+
+  .res-grid-certs { grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); }
+  @media (max-width: 640px) {
+    .res-grid-certs { grid-template-columns: 1fr; }
+    .timeline-dot-col { display: none !important; }
   }
 `;
 
@@ -224,9 +230,8 @@ export function Certificates() {
           <h2 className="sec-title">Certificates &amp; <span className="accent italic">Recognition</span></h2>
           <p className="sec-sub">Validated skills through certifications, course work, and hackathon recognition.</p>
         </motion.div>
-        <div style={{ 
+        <div className="res-grid-certs" style={{ 
           display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 420px))', 
           justifyContent: 'start', 
           gap: 24 
         }}>
@@ -331,7 +336,7 @@ export function Stats() {
           <h2 className="sec-title">Developer <span className="accent italic">Stats</span></h2>
           <p className="sec-sub" style={{ margin: '10px auto 0', textAlign: 'center' }}>Numbers that define my journey so far.</p>
         </motion.div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(200px,1fr))', gap: 16 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(160px,1fr))', gap: 16 }}>
           {STATS.map(stat => (
             <StatCard key={stat.label} stat={stat} />
           ))}
@@ -351,7 +356,7 @@ function TimelineItem({ item, i, inView }) {
       transition={{ duration: 0.6, delay: i * 0.12 }}
       style={{ display: 'flex', gap: '28px', position: 'relative' }}
     >
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flexShrink: 0 }}>
+      <div className="timeline-dot-col" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flexShrink: 0 }}>
         <div
           style={{
             width: '42px',

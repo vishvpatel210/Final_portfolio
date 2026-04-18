@@ -397,14 +397,20 @@ export default function Skills() {
         }
 
         /* ── Responsive ── */
-        @media (max-width: 900px) {
+        @media (max-width: 1024px) {
           .skills-pills-grid {
             grid-template-columns: repeat(3, 1fr);
           }
         }
-        @media (max-width: 640px) {
+        @media (max-width: 768px) {
+          .skills-heading { font-size: 2.2rem; }
           .skills-pills-grid {
             grid-template-columns: repeat(2, 1fr);
+          }
+        }
+        @media (max-width: 480px) {
+          .skills-pills-grid {
+            grid-template-columns: 1fr;
             gap: 12px;
           }
           .skills-pill {
@@ -412,6 +418,8 @@ export default function Skills() {
           }
           .skill-text {
             font-size: 0.78rem;
+            white-space: normal;
+            line-height: 1.2;
           }
         }
       `}</style>

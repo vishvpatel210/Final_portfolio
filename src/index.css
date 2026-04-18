@@ -24,8 +24,8 @@
   --font-serif:   'Instrument Serif', serif;
 
   --nav-h: 72px;
-  --px: clamp(20px, 6vw, 80px);
-  --py: clamp(80px, 10vw, 130px);
+  --px: clamp(16px, 5vw, 80px);
+  --py: clamp(60px, 10vw, 130px);
   --r:  12px;
   --r-sm: 8px;
   --r-lg: 18px;
@@ -737,8 +737,14 @@ body {
   color: var(--text-primary);
   line-height: 1.6;
   overflow-x: hidden;
+  width: 100%;
   -webkit-font-smoothing: antialiased;
   transition: background var(--t), color var(--t);
+}
+
+#root {
+  overflow-x: hidden;
+  width: 100%;
 }
 
 /* Dot grid layer — applies to ALL sections */
@@ -796,7 +802,12 @@ input, textarea { font-family: inherit; }
 *:focus-visible { outline: 2px solid var(--primary); outline-offset: 3px; border-radius: var(--r-sm); }
 
 /* ── Layout ── */
-.wrap { max-width: 1160px; margin: 0 auto; padding: 0 var(--px); }
+.wrap { 
+  width: 100%;
+  max-width: 1160px; 
+  margin: 0 auto; 
+  padding: 0 var(--px); 
+}
 
 /* ── Section label ── */
 .sec-label {
