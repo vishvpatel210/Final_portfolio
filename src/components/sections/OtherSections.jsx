@@ -15,6 +15,17 @@ const CERTIFICATE_ITEMS = [
     image: 'https://res.cloudinary.com/drj44l5df/image/upload/v1774779942/su_hackathon_nqifsm.jpg',
     link: 'https://res.cloudinary.com/drj44l5df/image/upload/v1774779942/su_hackathon_nqifsm.jpg',
   },
+  {
+    id: 'new-certificate',
+    title: 'Professional Certification',
+    issuer: 'Achievement Recognition',
+    year: '2026',
+    color: '#00d9a6',
+    icon: '',
+    rotation: '0deg',
+    image: 'https://res.cloudinary.com/drj44l5df/image/upload/q_auto/f_auto/v1776540391/Screenshot_2026-04-19_005538_brdyyp.png',
+    link: 'https://res.cloudinary.com/drj44l5df/image/upload/q_auto/f_auto/v1776540391/Screenshot_2026-04-19_005538_brdyyp.png',
+  },
 ];
 
 function CertCard({ cert, i, inView }) {
@@ -44,12 +55,13 @@ function CertCard({ cert, i, inView }) {
             src={cert.image}
             alt={cert.title}
             className="cert-img"
+            style={cert.rotation ? { transform: `translate(-50%, -50%) rotate(${cert.rotation})` } : {}}
           />
         </a>
       )}
       <div style={{ padding: '22px 20px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 14, gap: 10 }}>
-          <span style={{ fontSize: cert.icon.length > 2 ? '.72rem' : '1.8rem', fontFamily: 'var(--font-mono)', color: cert.color, letterSpacing: '.08em', textTransform: 'uppercase' }}>
+          <span style={{ fontSize: cert.icon?.length > 2 ? '.72rem' : '1.8rem', fontFamily: 'var(--font-mono)', color: cert.color, letterSpacing: '.08em', textTransform: 'uppercase' }}>
             {cert.icon}
           </span>
           <span

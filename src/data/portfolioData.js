@@ -1,3 +1,6 @@
+import figmaDesignImg from '../assets/figma_design.png';
+import pincodeImg from '../assets/pincode.png';
+import sewaproImg from '../assets/sewapro.png';
 import snitchImg from '../assets/snitch.png';
 import honestImg from '../assets/Honesthome.png';
 import thorneImg from '../assets/Thorne.png';
@@ -61,6 +64,18 @@ export const SKILLS = [
 ];
 
 export const PROJECTS = [
+  { id:8, name:'Pincode Search — Full Stack Search Tool', featured:true,
+    desc:'A full-stack application for searching area details by pincode efficiently with real-time UI updates.',
+    gradient:'linear-gradient(135deg,#f43f5e,#ec4899,#d946ef)',
+    image: pincodeImg,
+    tags:['React','Node.js','Express'],
+    links:{ demo:'https://pincode-search-one.vercel.app/', github:'https://github.com/vishvpatel210/PINCODE_SEARCH', yt:'' } },
+  { id:7, name:'SewaPro — Full Stack Platform', featured:true,
+    desc:'A full-stack platform connecting service professionals (plumbers, electricians, etc.) with clients. Built with React, Node.js, and MongoDB.',
+    gradient:'linear-gradient(135deg,#3b82f6,#2dd4bf,#a855f7)',
+    image: sewaproImg,
+    tags:['React','Node.js','MongoDB', 'Full-Stack'],
+    links:{ demo:'https://sewapro-vishvpatel.vercel.app/', github:'https://github.com/vishvpatel210/sewapro', yt:'' } },
   { id:1, name:'Snitch — FrontEnd Clone',     featured:true,
     desc:'A pixel-perfect frontend clone replicating the core UI with responsive layouts and smooth interactions.',
     gradient:'linear-gradient(135deg,#1a1a2e,#16213e,#0f3460)',
@@ -97,6 +112,15 @@ export const PROJECTS = [
     image: campusImg,
     tags:['Frontend','Education'],
     links:{ demo:'https://incandescent-entremet-cfcb14.netlify.app/campus', github:'https://github.com/vishvpatel210/Diwali-assignment/tree/main/campus', yt:'https://www.youtube.com/watch?v=IUIFLRPD1k4' } },
+];
+
+export const FIGMA_DESIGNS = [
+  { id:1, name:'All Figma Designs', featured:true,
+    desc:'Complete UI/UX design wireframes and high-fidelity mockups for modern portfolio components.',
+    gradient:'linear-gradient(135deg,#0d9488,#10b981,#059669)',
+    image: figmaDesignImg,
+    tags:['Figma','UI/UX', 'Web Design'],
+    links:{ figma:'https://www.figma.com/design/ZAZZlFtavEfqOBHK8yzAF8/Untitled?node-id=13-8&t=wH3hK7E1GssxcDqP-1' } }
 ];
 
 export const CERTS = [
